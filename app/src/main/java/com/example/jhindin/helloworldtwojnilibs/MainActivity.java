@@ -1,17 +1,24 @@
 package com.example.jhindin.helloworldtwojnilibs;
 
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity  extends Activity {
+
+    TextView field1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        field1 = (TextView)findViewById(R.id.field1);
+        field1.setText("Set from Java code");
     }
 
     @Override
