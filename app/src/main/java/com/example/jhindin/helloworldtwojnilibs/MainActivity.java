@@ -7,10 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.jhindin.jni1.Jni1Wrapper;
+
 
 public class MainActivity  extends Activity {
 
-    TextView field1;
+    TextView field1, field2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +21,9 @@ public class MainActivity  extends Activity {
 
         field1 = (TextView)findViewById(R.id.field1);
         field1.setText("Set from Java code");
+
+        field2 = (TextView)findViewById(R.id.field2);
+        field2.setText(Jni1Wrapper.getString());
     }
 
     @Override
