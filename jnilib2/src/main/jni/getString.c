@@ -1,7 +1,6 @@
 #include "getString.h"
 
-
-char *getString(void)
+__attribute__ ((visibility ("default"))) char *getString(void)
 {
     return "Hello from secondary lib";
 }

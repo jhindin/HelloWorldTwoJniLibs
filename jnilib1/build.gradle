@@ -22,6 +22,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.1.1'
+    compile project(':forceload')
 }
 
 class MyNdkPlugin implements Plugin<Project> {
@@ -137,8 +138,39 @@ class NdkCompile extends NdkTask {
 
     @TaskAction
     void taskAction(IncrementalTaskInputs inputs) {
-        println "    ---- MY NDK EXECUTING --- "
+        println "    ---- MY NDK EXECUTING for jnilib1 --- "
         FileTree sourceFileTree = getSource()
+
+
+        Set<File> androidMakefiles = sourceFileTree.matching(new PatternSet().include("**/Android.mk")).files
+        if (androidMakefiles)
+            runWithExisingMakefiles(androidMakefiles);
+        else
+            runWithGeneratedMakefile(inputs, sourceFileTree)
+    }
+
+    static boolean  doesContainParent(dirSet, File dir) {
+        dirSet.findResult {
+            it != dir && dir.toPath().startsWith(it.toPath())
+        }
+    }
+
+    void runWithExisingMakefiles(Set<File> androidMakefiles) {
+        def androidMakefileDirs = androidMakefiles.collect { it.getParentFile() }
+        def filteredAndroidMakefileDirs = androidMakefileDirs.findAll {
+            !doesContainParent(androidMakefileDirs, it)
+        }
+
+        filteredAndroidMakefileDirs.each {
+            File mk = new File(it, "Android.mk")
+            println "ndkDirectory = ${ndkDirectory}:${ndkDirectory.class}, makefile=${mk}:${mk.class}"
+            runNdkBuild(ndkDirectory, mk)
+        }
+
+    }
+
+    void runWithGeneratedMakefile(IncrementalTaskInputs inputs, FileTree sourceFileTree) {
+
         Set<File> sourceFiles = sourceFileTree.matching(new PatternSet().exclude("**/*.h")).files
         File makefile = getGeneratedMakefile()
 
@@ -185,6 +217,7 @@ class NdkCompile extends NdkTask {
         }
 
         // now build
+        println "ndkDirectory = ${ndkDirectory}:${ndkDirectory.class}, makefile=${makefile}:${makefile.class}"
         runNdkBuild(ndkDirectory, makefile)
     }
 
@@ -247,7 +280,7 @@ class NdkCompile extends NdkTask {
         Files.write(sb.toString(), makefile, Charsets.UTF_8)
     }
 
-    private void runNdkBuild(@NonNull File ndkLocation, @NonNull File makefile) {
+    void runNdkBuild(@NonNull File ndkLocation, @NonNull File makefile) {
         NdkConfig ndk = getNdkConfig()
 
         ProcessInfoBuilder builder = new ProcessInfoBuilder()
