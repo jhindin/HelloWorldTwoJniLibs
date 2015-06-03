@@ -46,7 +46,6 @@ class MyNdkPlugin implements Plugin<Project> {
 
     void apply(Project project) {
         project.afterEvaluate {
-            println "Replacing tasks from plugin";
             def oldReleaseNdk = project.tasks.findByPath("compileReleaseNdk")
             def oldDebugNdk = project.tasks.findByPath("compileDebugNdk")
 
@@ -138,7 +137,6 @@ class NdkCompile extends NdkTask {
 
     @TaskAction
     void taskAction(IncrementalTaskInputs inputs) {
-        println "    ---- MY NDK EXECUTING for jnilib1 --- "
         FileTree sourceFileTree = getSource()
 
 
@@ -163,7 +161,6 @@ class NdkCompile extends NdkTask {
 
         filteredAndroidMakefileDirs.each {
             File mk = new File(it, "Android.mk")
-            println "ndkDirectory = ${ndkDirectory}:${ndkDirectory.class}, makefile=${mk}:${mk.class}"
             runNdkBuild(ndkDirectory, mk)
         }
 
@@ -217,7 +214,6 @@ class NdkCompile extends NdkTask {
         }
 
         // now build
-        println "ndkDirectory = ${ndkDirectory}:${ndkDirectory.class}, makefile=${makefile}:${makefile.class}"
         runNdkBuild(ndkDirectory, makefile)
     }
 

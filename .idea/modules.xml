@@ -3,9 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HelloWorldTwoJniLibs.iml" filepath="$PROJECT_DIR$/HelloWorldTwoJniLibs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jnilib1/jnilib1.iml" filepath="$PROJECT_DIR$/jnilib1/jnilib1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jnilib2/jnilib2.iml" filepath="$PROJECT_DIR$/jnilib2/jnilib2.iml" />
     </modules>
   </component>
 </project>
